@@ -1,0 +1,253 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  spanish,
+  12pt,
+  letterpaper,
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{Times New Roman}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\ifLuaTeX
+\usepackage[bidi=basic,shorthands=off,]{babel}
+\else
+\usepackage[bidi=default,shorthands=off,]{babel}
+\fi
+\ifPDFTeX
+\else
+\babelfont{rm}[]{Times New Roman}
+\fi
+\ifLuaTeX
+  \usepackage{selnolig} % disable illegal ligatures
+\fi
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\usepackage{titlesec}
+\titleformat{\section}{\centering\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\raggedright\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\raggedright\bfseries\itshape}{\thesubsubsection}{1em}{}
+\titleformat{\paragraph}[runin]{\raggedright\bfseries}{\theparagraph}{1em}{}[.]
+\titleformat{\subparagraph}[runin]{\raggedright\bfseries\itshape}{\thesubparagraph}{1em}{}
+\titlespacing*{\paragraph}{0cm}{*1}{1em}
+\titlespacing*{\subparagraph}{0cm}{*1}{1em}
+
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{0pt}
+
+\usepackage{caption}
+\captionsetup[table]{labelfont=bf,textfont=it,labelsep=newline,justification=raggedright,singlelinecheck=false}
+\captionsetup[figure]{labelfont=bf,textfont=it,labelsep=newline,justification=raggedright,singlelinecheck=false}
+
+\usepackage{xurl}
+\tolerance=9999
+\emergencystretch=3em
+\hbadness=10000
+
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdflang={es},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\setstretch{1}
+\begin{center}
+
+\textbf{RECOLECCION DE DATOS MEDIANTE ENCUESTAS}
+
+\emph{D. A. Flores Cordero}
+
+7690-14-745 Universidad Mariano Gálvez
+
+047 Seminario de Tecnologías de Información
+
+\emph{dfloresc3@miumg.edu.gt}
+
+\end{center}
+
+\section{Resumen}\label{resumen}
+
+Este trabajo investiga los criterios necesarios para diseñar una
+encuesta efectiva y óptima, con el objetivo de aplicarlos en la
+construcción de un instrumento propio en una herramienta en línea. La
+investigación partió de tres fuentes especializadas en metodología de
+encuestas y experiencia de usuario, contrastadas con un análisis previo
+sobre los elementos que determinan la calidad de un cuestionario: la
+definición del objetivo, la delimitación del público, el tipo de
+pregunta según el propósito de la encuesta y la lógica condicional entre
+preguntas. A partir de ese análisis se identificaron cinco criterios
+centrales ---objetivo claro, brevedad, lenguaje neutro y comprensible,
+orden lógico de las preguntas y transparencia sobre el uso de la
+información--- que se aplicaron directamente al diseñar una encuesta de
+prueba en una herramienta en línea. Los resultados confirman que la
+calidad de una encuesta depende menos de la plataforma utilizada y más
+de las decisiones tomadas antes de escribir la primera pregunta: sin un
+objetivo definido, ningún criterio de redacción compensa la falta de
+dirección del instrumento. Se concluye que definir el objetivo y el
+público desde el inicio, junto con la brevedad y la neutralidad del
+lenguaje, son los factores que más influyen en la tasa de respuesta y en
+la calidad de los datos recolectados.
+
+\textbf{Palabras claves:} encuestas, diseño de cuestionarios,
+recolección de datos, experiencia de usuario
+
+\section{Desarrollo del tema}\label{desarrollo-del-tema}
+
+Una encuesta es un método para obtener información directamente de los
+sujetos de estudio sobre sus opiniones, actitudes o comportamientos
+(Galán Amador, s.f.). A diferencia de otros instrumentos de
+investigación, su valor no depende de la herramienta con la que se
+construye, sino de las decisiones que se toman antes de redactar la
+primera pregunta.
+
+\subsection{Definir el objetivo antes de
+diseñar}\label{definir-el-objetivo-antes-de-diseuxf1ar}
+
+Todo diseño de encuesta debe partir de una pregunta previa: qué se
+quiere descubrir y qué límites tiene esa búsqueda. QuestionPro (s.f.)
+coincide en que el objetivo claro es el criterio más importante para
+construir un buen cuestionario, porque de él dependen el tipo de
+muestreo, la cantidad de preguntas y el uso que se le dará a la
+información recolectada. Sin este paso, ningún criterio de redacción
+posterior compensa la falta de dirección del instrumento.
+
+\subsection{Delimitar el público y ser
+transparente}\label{delimitar-el-puxfablico-y-ser-transparente}
+
+Definido el objetivo, corresponde elegir a quién se dirige la encuesta e
+informarle por qué se le pregunta. Lucid (s.f.) recomienda ser
+transparente sobre cómo se usarán los datos recolectados y mantener las
+respuestas anónimas cuando corresponda, ya que esa claridad incrementa
+la disposición del encuestado a responder con honestidad.
+
+\subsection{El tipo de pregunta según el
+propósito}\label{el-tipo-de-pregunta-seguxfan-el-propuxf3sito}
+
+El tipo de pregunta no es una elección arbitraria: depende del objetivo
+definido al inicio. Si la encuesta es exploratoria, conviene usar
+preguntas abiertas, que permiten conocer cómo percibe el encuestado un
+problema o una solución; si la encuesta busca datos comparables y
+fáciles de procesar, corresponden preguntas cerradas o de opción
+múltiple (Lucid, s.f.). La cantidad de preguntas también varía según el
+objetivo --- no existe un número ideal fijo, sino el mínimo necesario
+para cubrirlo.
+
+\subsection{Preguntas breves, claras y
+neutrales}\label{preguntas-breves-claras-y-neutrales}
+
+Tanto QuestionPro (s.f.) como Lucid (s.f.) coinciden en tres criterios
+de redacción: preguntas breves (no más de 20 palabras), lenguaje simple
+y comprensible, y neutralidad para evitar sesgar la respuesta o
+incomodar al encuestado. Preguntar ``¿cuánto calcula que gastó?'' en
+lugar de ``¿cuánto gastó?'' es un ejemplo de cómo una pregunta mal
+calibrada obtiene respuestas menos confiables que una pregunta que
+reconoce los límites de la memoria del encuestado.
+
+\subsection{Orden lógico y lógica
+condicional}\label{orden-luxf3gico-y-luxf3gica-condicional}
+
+No todas las preguntas aplican a todos los encuestados: la respuesta a
+una pregunta puede abrir o cerrar el paso a otras. Además, las preguntas
+deben agruparse por tema y seguir un orden lógico --- pasar de un tema a
+otro sin transición confunde al encuestado y afecta la calidad de la
+respuesta (Lucid, s.f.).
+
+\subsection{Aplicación práctica}\label{aplicaciuxf3n-pruxe1ctica}
+
+Con base en estos criterios se diseñó una encuesta de prueba en una
+herramienta en línea, disponible en:
+\url{https://form.jotform.com/262052207277049}. El instrumento aplica el
+objetivo claro, la brevedad y el orden lógico descritos en los puntos
+anteriores como criterios de diseño.
+
+\section{Observaciones y comentarios}\label{observaciones-y-comentarios}
+
+El ejercicio confirmó que ninguna herramienta en línea compensa un
+objetivo mal definido: la tecnología solo ejecuta lo que el investigador
+ya decidió de antemano. También quedó claro que la brevedad y la
+claridad del lenguaje pesan más que la cantidad de preguntas --- una
+encuesta larga y bien intencionada puede fallar simplemente por cansar
+al encuestado. El mayor reto no fue elegir la herramienta, sino resistir
+la tentación de preguntar de más.
+
+\section{Conclusiones}\label{conclusiones}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  El objetivo de la encuesta determina todas las decisiones posteriores:
+  público, tipo de pregunta y extensión.
+\item
+  La brevedad y el lenguaje neutro aumentan la probabilidad de obtener
+  respuestas completas y confiables.
+\item
+  La lógica condicional entre preguntas evita exponer al encuestado a
+  preguntas que no le corresponden.
+\item
+  La calidad de una encuesta depende del diseño previo, no de la
+  plataforma utilizada para construirla.
+\end{enumerate}
+
+\section{Bibliografía}\label{bibliografuxeda}
+
+Galán Amador, M. (s.f.). \emph{La encuesta} {[}entrada de blog{]}. Guía
+metodológica para investigación.
+http://manuelgalan.blogspot.com/p/guia-metodologica-para-investigacion.html
+
+Lucid. (s.f.). \emph{Consejos para crear encuestas de usuarios
+efectivas}.
+https://lucid.co/es/blog/consejos-para-crear-encuestas-de-usuarios-efectivas
+
+QuestionPro. (s.f.). \emph{Criterios para elaborar encuestas de forma
+efectiva}.
+https://www.questionpro.com/blog/es/criterios-para-elaborar-encuestas/
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Repositorio del documento (código fuente LaTeX):
+\url{https://github.com/dan-desa/seminario-tecnologias-2026/tree/main/foro-01}
+
+\end{document}
