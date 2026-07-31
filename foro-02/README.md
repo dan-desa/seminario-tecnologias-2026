@@ -1,1 +1,1 @@
-# Foro 2 - Buenas prácticas para el desarrollo de aplicaciones reactivas
+# Foro 2 - REACTIVIDAD DE EXTREMO A EXTREMO

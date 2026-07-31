@@ -1,0 +1,291 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  spanish,
+  12pt,
+  letterpaper,
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{Times New Roman}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\ifLuaTeX
+\usepackage[bidi=basic,shorthands=off,]{babel}
+\else
+\usepackage[bidi=default,shorthands=off,]{babel}
+\fi
+\ifPDFTeX
+\else
+\babelfont{rm}[]{Times New Roman}
+\fi
+\ifLuaTeX
+  \usepackage{selnolig} % disable illegal ligatures
+\fi
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\usepackage{titlesec}
+\titleformat{\section}{\centering\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\raggedright\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\raggedright\bfseries\itshape}{\thesubsubsection}{1em}{}
+\titleformat{\paragraph}[runin]{\raggedright\bfseries}{\theparagraph}{1em}{}[.]
+\titleformat{\subparagraph}[runin]{\raggedright\bfseries\itshape}{\thesubparagraph}{1em}{}
+\titlespacing*{\paragraph}{0cm}{*1}{1em}
+\titlespacing*{\subparagraph}{0cm}{*1}{1em}
+
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{0pt}
+
+\usepackage{caption}
+\captionsetup[table]{labelfont=bf,textfont=it,labelsep=newline,justification=raggedright,singlelinecheck=false}
+\captionsetup[figure]{labelfont=bf,textfont=it,labelsep=newline,justification=raggedright,singlelinecheck=false}
+
+\usepackage{xurl}
+\tolerance=9999
+\emergencystretch=3em
+\hbadness=10000
+
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdflang={es},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\setstretch{1}
+\begin{center}
+
+\textbf{REACTIVIDAD DE EXTREMO A EXTREMO}
+
+\emph{D. A. Flores Cordero}
+
+7690-14-745 Universidad Mariano Gálvez
+
+047 Seminario de Tecnologías de Información
+
+\emph{dfloresc3@miumg.edu.gt}
+
+\end{center}
+
+\section{Resumen}\label{resumen}
+
+Este trabajo investiga las buenas prácticas para el desarrollo de
+aplicaciones reactivas, con el objetivo de identificar los criterios que
+determinan una implementación reactiva efectiva más allá de la simple
+elección de un framework. La investigación partió de cuatro fuentes: una
+comparación general entre programación reactiva e imperativa junto con
+sus herramientas principales (RxJS, ReactiveX, Spring WebFlux), el texto
+original del Manifiesto de Sistemas Reactivos con sus cuatro pilares
+---responsividad, resiliencia, elasticidad y orientación a mensajes---,
+un análisis complementario de ese mismo manifiesto, y una revisión
+técnica de Spring WebFlux como implementación reactiva de backend en
+Java. A partir de estas fuentes se identificaron tres prácticas
+centrales: extender el enfoque no bloqueante a todas las capas de la
+aplicación (controladores, acceso a datos, comunicación externa),
+gestionar explícitamente el backpressure para no saturar al consumidor,
+y aislar los fallos por componente para no comprometer el sistema
+completo. Los resultados muestran que la reactividad parcial ---aplicar
+el paradigma solo en una capa mientras el resto de la aplicación
+permanece bloqueante--- anula buena parte de sus beneficios de
+escalabilidad y eficiencia. Se concluye que la programación reactiva no
+es una decisión de framework, sino una decisión arquitectónica de
+extremo a extremo, y que su adopción debe evaluarse según la
+concurrencia real que exige el sistema, ya que en aplicaciones pequeñas
+puede introducir complejidad innecesaria sin un beneficio proporcional.
+
+\textbf{Palabras claves:} programación reactiva, buenas prácticas,
+backpressure, resiliencia, Spring WebFlux
+
+\section{Desarrollo del tema}\label{desarrollo-del-tema}
+
+La programación reactiva es un paradigma orientado a construir sistemas
+que reaccionan de forma eficiente a flujos constantes de datos y eventos
+mediante un enfoque no bloqueante (Quind, 2025). El Manifiesto de
+Sistemas Reactivos formalizó esta idea al definir cuatro propiedades que
+debe cumplir un sistema para considerarse reactivo: ser responsivo,
+resiliente, elástico y orientado a mensajes (Bonér et al., 2014). Su
+promesa ---mayor escalabilidad, mejor uso de recursos y menos problemas
+de concurrencia--- solo se cumple cuando se aplican ciertas prácticas de
+diseño; adoptar una librería reactiva sin cambiar la arquitectura
+alrededor no basta.
+
+\subsection{Más allá del framework: una decisión
+arquitectónica}\label{muxe1s-alluxe1-del-framework-una-decisiuxf3n-arquitectuxf3nica}
+
+Existe la tentación de tratar la reactividad como un detalle de
+implementación: cambiar \texttt{RestTemplate} por \texttt{WebClient}, o
+envolver una consulta en un \texttt{Observable}, y dar por hecho que la
+aplicación ya es reactiva. Sin embargo, para obtener mejores beneficios
+de un framework como Spring WebFlux es necesario que toda la aplicación
+siga una arquitectura reactiva y no bloqueante en todas sus capas:
+controladores, servicios, repositorios y comunicaciones externas (Quind,
+2025). Una sola capa bloqueante en la cadena vuelve a introducir el
+problema que la reactividad buscaba resolver.
+
+\subsection{Extender el enfoque no bloqueante a todas las
+capas}\label{extender-el-enfoque-no-bloqueante-a-todas-las-capas}
+
+Esta primera práctica se traduce en decisiones concretas de
+infraestructura. En el acceso a datos, corresponde usar bases de datos
+compatibles con el paradigma ---MongoDB reactivo o bases relacionales
+mediante R2DBC--- para evitar que una consulta bloquee un hilo mientras
+espera respuesta (Quind, 2025). En la comunicación con servicios
+externos, corresponde usar clientes HTTP reactivos como
+\texttt{WebClient} en lugar de \texttt{RestTemplate}. La misma lógica
+aplica en frontend: RxJS permite manejar los eventos de entrada del
+usuario como flujos observables en vez de callbacks anidados,
+integrándose con Angular, React o Vue (OBS Business School, s.f.).
+
+\subsection{Gestionar el backpressure de forma
+explícita}\label{gestionar-el-backpressure-de-forma-expluxedcita}
+
+Procesar datos como flujo continuo trae un riesgo que la programación
+imperativa no tiene: un productor más rápido que su consumidor. El
+backpressure permite gestionar la velocidad con la que se envían y
+procesan los datos para evitar saturaciones (Quind, 2025), por ejemplo
+limitando el tamaño del buffer que un flujo puede acumular antes de
+descartar o postergar nuevos elementos. Ignorar este mecanismo
+---tratarlo como un detalle opcional del framework--- es una causa común
+de que sistemas ``reactivos'' terminen consumiendo más memoria que su
+equivalente bloqueante bajo carga alta.
+
+\subsection{Aislar fallos: la resiliencia del Manifiesto
+Reactivo}\label{aislar-fallos-la-resiliencia-del-manifiesto-reactivo}
+
+El Manifiesto de Sistemas Reactivos define la resiliencia como la
+capacidad de un sistema de permanecer responsivo frente a fallos,
+lograda mediante replicación, contención, aislamiento y delegación: los
+fallos se manejan dentro de cada componente, de forma que cualquier
+parte del sistema pueda fallar y recuperarse sin comprometer el conjunto
+(Bonér et al., 2014). Vilanou (s.f.) resume esta misma idea al señalar
+que los fallos se trabajan de forma aislada para no afectar a los demás
+componentes. En la práctica, esto significa diseñar cada componente para
+fallar de forma contenida ---por ejemplo, un timeout en una llamada
+externa no debería derribar el hilo principal de la aplicación--- en
+lugar de asumir que un flujo de datos bien construido nunca falla.
+
+\subsection{Elegir la herramienta según el lenguaje y el
+paradigma}\label{elegir-la-herramienta-seguxfan-el-lenguaje-y-el-paradigma}
+
+No existe una única herramienta reactiva: la elección depende del
+entorno. En JavaScript, RxJS es la opción dominante para manejar eventos
+y datos asíncronos mediante observables (OBS Business School, s.f.). En
+Android, ReactiveX ---a través de RxJava y RxAndroid--- reduce el
+acoplamiento entre componentes y optimiza peticiones asíncronas a APIs
+(OBS Business School, s.f.). En backend Java, Spring WebFlux, construido
+sobre Project Reactor con los tipos \texttt{Mono} y \texttt{Flux}, es la
+alternativa reactiva a Spring MVC (Quind, 2025). Empresas como Netflix,
+Alibaba y Tencent usan esta última para sostener millones de solicitudes
+concurrentes (Quind, 2025).
+
+\subsection{Cuándo no conviene la programación
+reactiva}\label{cuuxe1ndo-no-conviene-la-programaciuxf3n-reactiva}
+
+La última buena práctica es reconocer cuándo no aplicar el paradigma. En
+aplicaciones pequeñas y simples, la programación reactiva puede ser
+excesiva frente a la programación imperativa, que resulta más fácil de
+implementar y mantener (OBS Business School, s.f.). Adoptarla sin una
+necesidad real de concurrencia alta agrega complejidad de código y una
+curva de aprendizaje ---flujos, operadores, backpressure--- sin un
+beneficio proporcional.
+
+\section{Observaciones y comentarios}\label{observaciones-y-comentarios}
+
+Investigar tres fuentes con enfoques distintos ---una comparativa
+general, el Manifiesto Reactivo y un caso técnico de Spring WebFlux---
+dejó claro que la mayoría de la documentación disponible describe
+\emph{qué} es la programación reactiva, pero muy poca detalla
+\emph{cómo} aplicarla de forma consistente en todas las capas. El mayor
+hallazgo no fue una herramienta específica, sino confirmar que la
+resiliencia y el backpressure suelen tratarse como temas secundarios
+frente al atractivo de la sintaxis de flujos, cuando en la práctica son
+los que sostienen el sistema bajo carga real.
+
+\section{Conclusiones}\label{conclusiones}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  La programación reactiva es una decisión arquitectónica de extremo a
+  extremo, no la elección de un framework o una librería puntual.
+\item
+  Aplicar el paradigma en una sola capa mientras el resto de la
+  aplicación permanece bloqueante anula buena parte de sus beneficios de
+  escalabilidad.
+\item
+  Gestionar el backpressure y aislar los fallos por componente son
+  prácticas tan necesarias como el manejo de flujos asíncronos, aunque
+  reciben menos atención en la documentación general.
+\item
+  La herramienta correcta depende del entorno: RxJS en frontend
+  JavaScript, ReactiveX en Android y Spring WebFlux en backend Java.
+\item
+  La programación reactiva no conviene en aplicaciones pequeñas sin
+  necesidad real de alta concurrencia, donde su complejidad adicional no
+  se justifica.
+\end{enumerate}
+
+\section{Bibliografía}\label{bibliografuxeda}
+
+Bonér, J., Farley, D., Kuhn, R., \& Thompson, M. (2014). \emph{El
+Manifiesto de Sistemas Reactivos} (v2.0).
+https://www.reactivemanifesto.org/es
+
+OBS Business School. (s.f.). \emph{Cómo aplicar la programación reactiva
+en aplicaciones web modernas}.
+https://www.obsbusiness.school/blog/como-aplicar-la-programacion-reactiva-en-aplicaciones-web-modernas-cp
+
+Quind. (2025). \emph{Programación reactiva con Spring WebFlux:
+eficiencia y escalabilidad para el backend}.
+https://quind.io/blog/desarrollo/programacion-reactiva-con-spring-webflux-eficiencia-y-escalabilidad-para-el-backend/
+
+Vilanou, R. (s.f.). \emph{¿Qué es la programación reactiva?}. Doonamis.
+https://www.doonamis.com/que-es-la-programacion-reactiva/
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Repositorio del documento (código fuente LaTeX):
+\url{https://github.com/dan-desa/seminario-tecnologias-2026/tree/main/foro-02}
+
+\end{document}
