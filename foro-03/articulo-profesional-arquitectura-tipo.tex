@@ -1,0 +1,314 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  spanish,
+  12pt,
+  letterpaper,
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{Times New Roman}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\ifLuaTeX
+\usepackage[bidi=basic,shorthands=off,]{babel}
+\else
+\usepackage[bidi=default,shorthands=off,]{babel}
+\fi
+\ifPDFTeX
+\else
+\babelfont{rm}[]{Times New Roman}
+\fi
+\ifLuaTeX
+  \usepackage{selnolig} % disable illegal ligatures
+\fi
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\usepackage{titlesec}
+\titleformat{\section}{\centering\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\raggedright\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\raggedright\bfseries\itshape}{\thesubsubsection}{1em}{}
+\titleformat{\paragraph}[runin]{\raggedright\bfseries}{\theparagraph}{1em}{}[.]
+\titleformat{\subparagraph}[runin]{\raggedright\bfseries\itshape}{\thesubparagraph}{1em}{}
+\titlespacing*{\paragraph}{0cm}{*1}{1em}
+\titlespacing*{\subparagraph}{0cm}{*1}{1em}
+
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{0pt}
+
+\usepackage{caption}
+\captionsetup[table]{labelfont=bf,textfont=it,labelsep=newline,justification=raggedright,singlelinecheck=false}
+\captionsetup[figure]{labelfont=bf,textfont=it,labelsep=newline,justification=raggedright,singlelinecheck=false}
+
+\usepackage{xurl}
+\tolerance=9999
+\emergencystretch=3em
+\hbadness=10000
+
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdflang={es},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\setstretch{1}
+\begin{center}
+
+\textbf{SOFTWARE Y LAS ARQUITECTURAS}
+
+\emph{D. A. Flores Cordero}
+
+7690-14-745 Universidad Mariano Gálvez
+
+047 Seminario de Tecnologías de Información
+
+\emph{dfloresc3@miumg.edu.gt}
+
+\end{center}
+
+\section{Resumen}\label{resumen}
+
+Este trabajo investiga las ``arquitecturas tipo'' documentadas para
+aplicaciones de software, con el objetivo de identificar qué criterio
+real distingue a un monolito, un modelo N-capas, una arquitectura limpia
+(hexagonal) y una arquitectura de microservicios, más allá de sus
+nombres. La investigación partió de tres fuentes: la guía de
+arquitecturas de aplicaciones web de Microsoft, que documenta la
+evolución de un proyecto único hacia capas, arquitectura limpia y
+contenedores; una propuesta académica de modelo en cinco capas para
+aplicaciones web multiplataforma; y un marco de evaluación de
+arquitectura de aplicaciones centrado en cuatro elementos
+---funcionalidad, ensamblaje, interacción y gestión de datos---. A
+partir de estas fuentes se identificó que las arquitecturas tipo no son
+alternativas que compiten entre sí, sino puntos distintos en una misma
+escala de separación de responsabilidades, y que su costo real no está
+en el nombre del patrón sino en las dependencias que genera entre capas
+y en la coordinación que exige entre servicios. Los resultados muestran
+que la arquitectura limpia resuelve el problema de dependencia
+direccional del modelo N-capas tradicional, y que los microservicios
+solo se justifican cuando existe una necesidad real de escalar
+componentes de forma independiente, no como estándar por defecto. Se
+concluye que elegir una arquitectura tipo es una decisión de
+costo-beneficio ligada al tamaño y a la concurrencia real del sistema,
+no una preferencia estética entre patrones.
+
+\textbf{Palabras claves:} arquitectura de software, monolito,
+arquitectura por capas, arquitectura limpia, microservicios
+
+\section{Desarrollo del tema}\label{desarrollo-del-tema}
+
+Toda aplicación profesional necesita un límite entre sus
+responsabilidades; la única decisión real es en qué momento y con qué
+costo se traza ese límite. Las arquitecturas documentadas en la
+literatura técnica ---monolito de un solo proyecto, N-capas,
+arquitectura limpia (u hexagonal) y microservicios--- no compiten por
+ser ``la correcta'': son puntos distintos en la misma escala de
+separación de responsabilidades, y elegir la que no corresponde al
+tamaño real del problema sale más caro que no elegir ninguna (Microsoft,
+s.f.).
+
+\subsection{El monolito como punto de
+partida}\label{el-monolito-como-punto-de-partida}
+
+Un proyecto ASP.NET Core nuevo comienza, por defecto, como un monolito
+``todo en uno'': presentación, lógica de negocio y acceso a datos
+conviven en un mismo ensamblado, separados apenas por carpetas
+(Microsoft, s.f.). Esta simplicidad tiene un límite temporal, no
+estructural: a medida que crece el número de archivos, la falta de una
+frontera real entre carpetas ---y no solo entre nombres de carpetas---
+deriva en código espagueti, porque nada impide que una vista llame
+directamente a la capa de datos. La respuesta habitual no es abandonar
+el monolito, sino dividirlo en varios proyectos por responsabilidad
+dentro del mismo despliegue. Vale además una distinción que rara vez se
+hace explícita: capas es separación lógica dentro del código; niveles es
+distribución física en servidores o procesos distintos. Es perfectamente
+posible ---y común--- tener una aplicación de varias capas que se
+implementa en un único nivel (Microsoft, s.f.).
+
+\subsection{El modelo N-capas y su costo de
+dependencia}\label{el-modelo-n-capas-y-su-costo-de-dependencia}
+
+La organización más citada divide la aplicación en interfaz de usuario
+(UI), lógica de negocio (BLL) y acceso a datos (DAL), donde cada capa
+solo puede llamar a la inmediata inferior. El problema que rara vez se
+menciona junto a este diagrama es que las dependencias de compilación
+corren de arriba hacia abajo: la lógica de negocio, que debería ser el
+corazón de la aplicación, termina dependiendo de los detalles de acceso
+a datos ---y, con frecuencia, de la existencia de una base de datos real
+para poder probarla (Microsoft, s.f.). Una propuesta académica
+alternativa lleva esta separación un paso más allá con un modelo de
+cinco capas explícitas ---base de datos, lógica de manejo de datos,
+procesos de negocio, control de interfaz y vista---, donde cada capa se
+comunica con la siguiente mediante formatos neutros (XML, JSON) sobre
+HTTP, de modo que cualquier capa pueda sustituirse sin reescribir las
+demás (Gómez Fermín \& Moreno Poggio, 2014). El modelo admite distintos
+despliegues: monolítico en un solo servidor, escalabilidad lineal con
+una capa por servidor, escalabilidad independiente con réplicas por
+capa, o clúster para la base de datos. La ganancia en flexibilidad y
+disponibilidad es real, pero también lo es el costo: más servidores, más
+piezas que administrar y, en el caso de la escalabilidad independiente,
+un único punto de falla si la capa de base de datos cae, sin importar
+cuántas réplicas tengan las capas superiores (Gómez Fermín \& Moreno
+Poggio, 2014).
+
+\subsection{Arquitectura limpia: invertir la
+dependencia}\label{arquitectura-limpia-invertir-la-dependencia}
+
+La arquitectura limpia ---también conocida como hexagonal, de puertos y
+adaptadores, u onion--- resuelve exactamente el problema de dirección
+que arrastra el modelo N-capas tradicional. En lugar de que la lógica de
+negocio dependa del acceso a datos, esa dependencia se invierte: el
+núcleo de la aplicación define interfaces, y es la infraestructura la
+que depende de ese núcleo al implementarlas (Microsoft, s.f.).
+Visualizada como círculos concéntricos, en el centro están las entidades
+y los servicios de dominio; afuera, interfaz de usuario e
+infraestructura dependen del núcleo, pero no dependen entre sí. La
+ventaja concreta no es solo conceptual: al no depender de
+infraestructura, el núcleo de la aplicación se puede probar con pruebas
+unitarias sin necesidad de una base de datos real, y las
+implementaciones de infraestructura se pueden intercambiar ---de SQL
+Server a una API en la nube, por ejemplo--- sin tocar la lógica de
+negocio (Microsoft, s.f.). Sin embargo, esta inversión de dependencias
+no es gratuita: exige definir interfaces y una raíz de composición donde
+se conectan las implementaciones concretas, una capa adicional de
+indirección que un equipo pequeño puede no necesitar para una aplicación
+simple.
+
+\subsection{Contenedores y microservicios: independencia con costo de
+coordinación}\label{contenedores-y-microservicios-independencia-con-costo-de-coordinaciuxf3n}
+
+Un monolito también puede desplegarse como un único contenedor Docker,
+lo cual resuelve el problema de ``funciona en mi máquina'' y agiliza la
+actualización mediante imágenes inmutables que se levantan en segundos
+(Microsoft, s.f.). El límite aparece con el escalado: en una tienda en
+línea, muchos más clientes navegan el catálogo de productos que los que
+llegan a pagar, pero un monolito escala todo el código por igual, aunque
+solo un componente sea el cuello de botella. Ahí es donde los
+microservicios ofrecen una ventaja real: cada servicio se escala, se
+prueba y se despliega de forma independiente, dentro de un contexto
+delimitado propio. La contraparte es que separar una aplicación en
+procesos discretos agrega complejidad de comunicación ---ya no hay
+llamadas a métodos, sino mensajería asíncrona--- y obliga a resolver
+control de bus de eventos, reintentos, resiliencia de mensajes y
+consistencia eventual, piezas que un monolito nunca necesitó (Microsoft,
+s.f.). Esta misma lógica de desacoplar componentes mediante un
+middleware neutro a la plataforma ---sin que un servicio conozca la
+implementación interna del otro--- es la que sostiene también al modelo
+de cinco capas descrito antes (Gómez Fermín \& Moreno Poggio, 2014).
+
+\subsection{Un marco para evaluar, no solo para
+nombrar}\label{un-marco-para-evaluar-no-solo-para-nombrar}
+
+Más allá del nombre del patrón, cualquier arquitectura de aplicación se
+puede evaluar con cuatro elementos: funcionalidad (qué hace el sistema),
+ensamblaje (cómo se agrupan sus partes), interacción (cómo se comunican)
+y gestión de datos (cómo se almacenan, protegen y mueven los datos)
+(Conexiam, s.f.). El ensamblaje es, según esta perspectiva, el desafío
+crítico: es donde se decide si la funcionalidad vive integrada en una
+sola aplicación, expuesta como microservicio, o distribuida en varias
+capas, y esa decisión de ensamblaje es la que define los límites de
+integración y el ciclo de vida de cada pieza (Conexiam, s.f.). Este
+marco tiene una utilidad práctica que los diagramas de capas no ofrecen
+por sí solos: permite comparar un monolito con una arquitectura limpia o
+con microservicios usando los mismos cuatro criterios, en lugar de
+discutir cuál ``se ve'' más moderna.
+
+\section{Observaciones y comentarios}\label{observaciones-y-comentarios}
+
+Investigar tres fuentes con enfoques distintos ---una guía de
+implementación de Microsoft, una propuesta académica de modelo en capas
+y un marco de evaluación de arquitectura empresarial--- confirmó que la
+mayoría de la documentación técnica describe cómo estructurar el código,
+pero rara vez cuantifica el costo operativo de esa estructura. El
+hallazgo más útil no fue una arquitectura específica, sino el marco de
+cuatro elementos de Conexiam (s.f.): funciona como vocabulario común
+para comparar patrones que, a simple vista, parecen inconmensurables
+entre sí.
+
+\section{Conclusiones}\label{conclusiones}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Monolito, N-capas, arquitectura limpia y microservicios no son
+  alternativas excluyentes: son puntos distintos en la misma escala de
+  separación de responsabilidades.
+\item
+  Capas es separación lógica del código; niveles es distribución física
+  en servidores. Una aplicación de varias capas puede desplegarse
+  perfectamente en un solo nivel.
+\item
+  La arquitectura limpia resuelve el problema de dependencia direccional
+  del modelo N-capas tradicional invirtiendo las dependencias hacia el
+  núcleo de negocio, a costa de una capa adicional de indirección.
+\item
+  Los microservicios solo se justifican cuando existe una necesidad real
+  de escalar componentes de forma independiente; de lo contrario, la
+  complejidad de coordinación que agregan supera el beneficio.
+\item
+  Evaluar arquitecturas por funcionalidad, ensamblaje, interacción y
+  gestión de datos es más útil que compararlas únicamente por su nombre
+  o popularidad.
+\end{enumerate}
+
+\section{Bibliografía}\label{bibliografuxeda}
+
+Conexiam. (s.f.). \emph{¿Qué es la arquitectura de aplicaciones?}.
+https://conexiam.com/es/que-es-la-arquitectura-de-aplicaciones/
+
+Gómez Fermín, L. V., \& Moreno Poggio, T. R. (2014). \emph{Propuesta de
+modelo en cinco capas para aplicaciones web}. SciELO Venezuela.
+https://ve.scielo.org/scielo.php?script=sci\_arttext\&pid=S1315-01622014000200009
+
+Microsoft. (s.f.). \emph{Arquitecturas de aplicaciones web comunes}.
+Microsoft Learn.
+https://learn.microsoft.com/es-es/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Repositorio del documento (código fuente LaTeX):
+\url{https://github.com/dan-desa/seminario-tecnologias-2026/tree/main/foro-03}
+
+\end{document}

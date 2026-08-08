@@ -1,1 +1,1 @@
-# Foro 3 - ¿Cómo elegir la arquitectura de la aplicación según su tipo?
+# Foro 3 - SOFTWARE Y LAS ARQUITECTURAS
